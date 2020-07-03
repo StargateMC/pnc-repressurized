@@ -48,17 +48,22 @@ public class HackTickHandler {
     @SubscribeEvent
     public void worldTick(TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            try {
-                for (Entity entity : event.world.loadedEntityList) {
-                    if (entity.hasCapability(CapabilityHacking.HACKING_CAPABILITY, null)) {
-                        IHacking hack = entity.getCapability(CapabilityHacking.HACKING_CAPABILITY, null);
-                        if (!hack.getCurrentHacks().isEmpty()) {
-                            hack.update(entity);
+            if (event.world.loadedEntityList.size() > 5000) {
+                //System.out.println("Not ticking dimension: " + event.world.provider.getDimension() + " for hacking updates, as the entity list is currently: " + event.world.loadedEntityList.size() + " in size.");
+                return;
+            } else {
+                try {
+                    for (Entity entity : event.world.loadedEntityList) {
+                        if (entity.hasCapability(CapabilityHacking.HACKING_CAPABILITY, null)) {
+                            IHacking hack = entity.getCapability(CapabilityHacking.HACKING_CAPABILITY, null);
+                            if (!hack.getCurrentHacks().isEmpty()) {
+                                hack.update(entity);
+                            }
                         }
                     }
+                } catch (Throwable e) {
+                    // Catching a CME which I have no clue on what might cause it.
                 }
-            } catch (Throwable e) {
-                // Catching a CME which I have no clue on what might cause it.
             }
         }
     }
