@@ -28,8 +28,13 @@ public class TileEntityCache {
     public static TileEntityCache[] getDefaultCache(World world, BlockPos pos) {
         TileEntityCache[] cache = new TileEntityCache[6];
         for (int i = 0; i < 6; i++) {
-            EnumFacing d = EnumFacing.byIndex(i);
-            cache[i] = new TileEntityCache(world, pos.offset(d));
+            try {
+            	EnumFacing d = EnumFacing.byIndex(i);
+            	cache[i] = new TileEntityCache(world, pos.offset(d));
+            } catch (Exception e) {
+            	System.out.println("Supressing crash from PNC: " + e.getMessage());
+            	e.printStackTrace();
+            }
         }
         return cache;
     }
