@@ -28,8 +28,13 @@ public class TileEntityCache {
     public static TileEntityCache[] getDefaultCache(World world, BlockPos pos) {
         TileEntityCache[] cache = new TileEntityCache[6];
         for (int i = 0; i < 6; i++) {
-            Direction d = Direction.byIndex(i);
-            cache[i] = new TileEntityCache(world, pos.offset(d));
+            try {
+            	Direction d = Direction.byIndex(i);
+            	cache[i] = new TileEntityCache(world, pos.offset(d));
+            } catch (Exception e) {
+            	System.out.println("Supressing exception from PNC:TileEntityCache, exception: " + e.getMessage());
+            	e.printStackTrace();
+            }
         }
         return cache;
     }
